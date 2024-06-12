@@ -1,4 +1,3 @@
-
 EcoCoin
 EcoCoin is an ERC-20-like token implemented in Solidity. The contract includes functionalities to mint and burn tokens, providing a fundamental framework for managing tokens on the Ethereum blockchain.
 
@@ -98,15 +97,13 @@ Please ensure your code adheres to the existing style conventions and passes all
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-csharp
+Explanation of the Code
+solidity
 Copy code
-
-### Explanation of the Code
-
-```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 Explanation: Specifies the license (MIT) and the version of Solidity (0.8.25) used.
+
 solidity
 Copy code
 contract EcoCoin {
@@ -114,10 +111,12 @@ contract EcoCoin {
     string public constant symbol = "ECO";
     uint public totalSupply = 0;
 Explanation: Defines the contract EcoCoin. It declares public constant variables for the token name and symbol, and a public variable totalSupply initialized to 0.
+
 solidity
 Copy code
     mapping(address => uint) public balances;
 Explanation: Declares a public mapping to store the balances of addresses.
+
 solidity
 Copy code
     function mint(address addr, uint amount) public {
@@ -125,6 +124,7 @@ Copy code
         balances[addr] += amount;
     }
 Explanation: Defines the mint function, which increases totalSupply and the balance of addr by amount.
+
 solidity
 Copy code
     function burn(address addr, uint amount) public {
