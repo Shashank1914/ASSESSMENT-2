@@ -5,16 +5,12 @@ Table of Contents
 Project Description
 Features
 Getting Started
-Prerequisites
-Installation
 Compiling the Contract
 Usage
-Deploying the Contract
 Interacting with the Contract
 Contract Details
 Functions
 Contributing
-License
 Project Description
 EcoCoin is designed as a simple and efficient token for various use cases. With basic minting and burning functionalities, EcoCoin can serve as the foundation for more complex token systems or as a standalone token for specific projects.
 
@@ -24,63 +20,32 @@ Minting: Increase the total supply and assign new tokens to a specified address.
 Burning: Decrease the total supply by destroying tokens from a specified address, ensuring the address has a sufficient balance.
 Balance Tracking: Mapping of addresses to token balances.
 Getting Started
-Prerequisites
-To interact with the EcoCoin contract, ensure you have the following tools installed:
-
-Node.js
-npm or yarn
-Hardhat
-An Ethereum wallet like MetaMask
-Installation
-Clone the repository:
-
-bash
-Copy code
-git clone https://github.com/yourusername/ecocoin.git
-cd ecocoin
-Install the dependencies:
-
-bash
-Copy code
-npm install
-# or
-yarn install
 Compiling the Contract
-Compile the smart contract using Hardhat:
+You can compile the contract directly on Remix:
 
-bash
-Copy code
-npx hardhat compile
+Open Remix.
+Create a new file named EcoCoin.sol and paste the contract code below.
+Click on the "Solidity Compiler" tab and compile the contract.
 Usage
-Deploying the Contract
-Create a deployment script in scripts/deploy.js:
-
-javascript
-Copy code
-async function main() {
-    const EcoCoin = await ethers.getContractFactory("EcoCoin");
-    const ecoCoin = await EcoCoin.deploy();
-    console.log("EcoCoin deployed to:", ecoCoin.address);
-}
-
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
-Run the script:
-
-bash
-Copy code
-npx hardhat run scripts/deploy.js --network <your-network>
 Interacting with the Contract
-After deploying the contract, you can interact with it using the Hardhat console or through your dApp frontend.
+After deploying the contract, you can interact with it using the deployed contract instance in Remix.
 
-javascript
-Copy code
-const ecoCoin = await ethers.getContractAt("EcoCoin", <deployed_contract_address>);
-await ecoCoin.mint(<address>, <amount>);
-await ecoCoin.burn(<address>, <amount>);
+Minting Tokens:
+
+Select the mint function.
+Enter the address and amount to mint, then click "transact" and confirm the transaction.
+Burning Tokens:
+
+Select the burn function.
+Enter the address and amount to burn, then click "transact" and confirm the transaction.
 Contract Details
+Public Variables
+name: The name of the token, set to "EcoCoin". This is constant, so it cannot be reassigned.
+symbol: The abbreviation of the token, set to "ECO". This variable is also constant.
+totalSupply: The total supply of the token, initially set to 0.
+Mapping
+The contract uses a mapping balances to store the token balances of individual addresses.
+
 Functions
 mint(address addr, uint amount): Mints new tokens and assigns them to the specified address, increasing the total supply.
 burn(address addr, uint amount): Burns tokens from the specified address, decreasing the total supply, with a check to ensure the address has sufficient balance.
@@ -92,45 +57,49 @@ Create a new branch (git checkout -b feature/YourFeature).
 Commit your changes (git commit -m 'Add some feature').
 Push to the branch (git push origin feature/YourFeature).
 Open a pull request.
-Please ensure your code adheres to the existing style conventions and passes all tests.
-
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Explanation of the Code
+EcoCoin Solidity Code
 solidity
 Copy code
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
-Explanation: Specifies the license (MIT) and the version of Solidity (0.8.25) used.
 
-solidity
-Copy code
+/*
+       REQUIREMENTS
+    1. Your contract will have public variables that store the details about your coin (Token Name, Token Abbrv., Total Supply)
+    2. Your contract will have a mapping of addresses to balances (address => uint)
+    3. You will have a mint function that takes two parameters: an address and a value. 
+       The function then increases the total supply by that number and increases the balance 
+       of the “sender” address by that amount
+    4. Your contract will have a burn function, which works the opposite of the mint function, as it will destroy tokens. 
+       It will take an address and value just like the mint functions. It will then deduct the value from the total supply 
+       and from the balance of the “sender”.
+    5. Lastly, your burn function should have conditionals to make sure the balance of "sender" is greater than or equal 
+       to the amount that is supposed to be burned.
+*/
+
 contract EcoCoin {
+
     string public constant name = "EcoCoin";
     string public constant symbol = "ECO";
     uint public totalSupply = 0;
-Explanation: Defines the contract EcoCoin. It declares public constant variables for the token name and symbol, and a public variable totalSupply initialized to 0.
 
-solidity
-Copy code
+    // Mapping for token balances
     mapping(address => uint) public balances;
-Explanation: Declares a public mapping to store the balances of addresses.
 
-solidity
-Copy code
+    // Mint function 
     function mint(address addr, uint amount) public {
         totalSupply += amount;
         balances[addr] += amount;
     }
-Explanation: Defines the mint function, which increases totalSupply and the balance of addr by amount.
 
-solidity
-Copy code
+    // Burn function 
     function burn(address addr, uint amount) public {
         require(balances[addr] >= amount, "Insufficient balance to burn");
         totalSupply -= amount;
         balances[addr] -= amount;
     }
 }
-Explanation: Defines the burn function, which decreases totalSupply and the balance of addr by amount, only if addr has sufficient balance.
+
+
+
+
